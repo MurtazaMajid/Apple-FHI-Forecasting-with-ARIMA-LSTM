@@ -2,5 +2,7 @@ streamlit
 pandas
 numpy
 plotly
-matplotlib
-wordcloud
+tensorflow
+scikit-learn
+statsmodels
+joblib
