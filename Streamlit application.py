@@ -144,7 +144,7 @@ def load_all_data():
     fedfunds.index.name = 'Date'
     fedfunds = fedfunds.loc['2010-06-01':'2025-04-01']
 
-    news = pd.read_csv(BASE + "/nyt_apple_related_news.csv")
+    news = pd.read_csv(BASE + "New York Times News related to apple.csv")
     news['pub_date'] = pd.to_datetime(news['pub_date'])
 
     # ── Merge ────────────────────────────────────────────
