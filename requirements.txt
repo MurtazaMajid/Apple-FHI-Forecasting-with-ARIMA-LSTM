@@ -1,8 +1,9 @@
-streamlit
-pandas
-numpy
-plotly
-tensorflow
-scikit-learn
-statsmodels
-joblib
+streamlit==1.55.0
+pandas==2.2.2
+numpy==1.26.4
+plotly==6.0.0
+matplotlib==3.8.4
+scikit-learn==1.4.2
+statsmodels==0.14.1
+tensorflow>=2.16.0
+joblib==1.4.2

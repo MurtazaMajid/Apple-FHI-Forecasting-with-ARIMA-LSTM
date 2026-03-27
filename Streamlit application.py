@@ -106,48 +106,48 @@ LOOKBACK = 12   # notebook cell [064]
 # ─────────────────────────────────────────────
 @st.cache_data
 def load_all_data():
-    BASE = r"C:\Users\Murta\Downloads\TASK 2 FINAL ZIP (1)\TASK 2 FINAL ZIP"
+    BASE = "Data"
 
-    apple = pd.read_csv(BASE + r"\Apples Financial Data 2010 - 2025.csv")
+    apple = pd.read_csv(BASE + "/Apples Financial Data 2010 - 2025.csv")
     apple['Date'] = pd.to_datetime(apple['Date']).dt.to_period('M').dt.to_timestamp()
     apple.set_index('Date', inplace=True)
     apple = apple.loc['2010-06-01':'2025-04-01']
 
-    cpi = pd.read_csv(BASE + r"\USA CPI 2010 - 2025.csv")
+    cpi = pd.read_csv(BASE + "/USA CPI 2010 - 2025.csv")
     cpi['observation_date'] = pd.to_datetime(cpi['observation_date']).dt.to_period('M').dt.to_timestamp()
     cpi.set_index('observation_date', inplace=True)
     cpi.index.name = 'Date'
     cpi = cpi.loc['2010-06-01':'2025-04-01']
 
-    oil = pd.read_csv(BASE + r"\USA Crude Oil 2010 - 2025.csv")
+    oil = pd.read_csv(BASE + "/USA Crude Oil 2010 - 2025.csv")
     oil['observation_date'] = pd.to_datetime(oil['observation_date']).dt.to_period('M').dt.to_timestamp()
     oil.set_index('observation_date', inplace=True)
     oil.index.name = 'Date'
     oil = oil.loc['2010-06-01':'2025-04-01']
 
-    copper = pd.read_csv(BASE + r"\USA Copper prices 2010 - 2025.csv")
+    copper = pd.read_csv(BASE + "/USA Copper prices 2010 - 2025.csv")
     copper['observation_date'] = pd.to_datetime(copper['observation_date']).dt.to_period('M').dt.to_timestamp()
     copper.set_index('observation_date', inplace=True)
     copper.index.name = 'Date'
     copper = copper.loc['2010-06-01':'2025-04-01']
 
-    gdp = pd.read_csv(BASE + r"\USA GDP 2010 - 2025.csv")
+    gdp = pd.read_csv(BASE + "/USA GDP 2010 - 2025.csv")
     gdp['observation_date'] = pd.to_datetime(gdp['observation_date']).dt.to_period('M').dt.to_timestamp()
     gdp.set_index('observation_date', inplace=True)
     gdp.index.name = 'Date'
     gdp = gdp.resample('MS').ffill()
     gdp = gdp.loc['2010-06-01':'2025-04-01']
 
-    fedfunds = pd.read_csv(BASE + r"\USA Fed Funds 2010 - 2025.csv")
+    fedfunds = pd.read_csv(BASE + "/USA Fed Funds 2010 - 2025.csv")
     fedfunds['observation_date'] = pd.to_datetime(fedfunds['observation_date']).dt.to_period('M').dt.to_timestamp()
     fedfunds.set_index('observation_date', inplace=True)
     fedfunds.index.name = 'Date'
     fedfunds = fedfunds.loc['2010-06-01':'2025-04-01']
 
-    news = pd.read_csv(BASE + r"\nyt_apple_related_news.csv")
+    news = pd.read_csv(BASE + "/New York Times News related to apple.csv")
     news['pub_date'] = pd.to_datetime(news['pub_date'])
 
-    # ── Merge (notebook Section 5) ────────────────────────────────────────────
+    # ── Merge ────────────────────────────────────────────
     combined = apple.copy()
     combined = combined.join(cpi,      how='inner')
     combined = combined.join(oil,      how='inner')
@@ -156,32 +156,28 @@ def load_all_data():
     combined = combined.join(fedfunds, how='inner')
     combined = combined.ffill()
 
-    # sentiment_score was in macro_cols in the notebook (cell 032).
-    # We don't have the pre-scored CSV so we use 0 (neutral) as a safe fallback.
-    # Only the "All Features" models use this column.
     if 'sentiment_score' not in combined.columns:
         combined['sentiment_score'] = 0.0
 
-    # ── Scale exactly as notebook Section 7 (cell 035) ───────────────────────
+    # ── Scaling ──────────────────────────────────────────
     from sklearn.preprocessing import MinMaxScaler
     apple_cols = list(apple.columns)
     macro_cols = ['CPIAUCSL', 'WTISPLC', 'PCOPPUSDM', 'GDP', 'FEDFUNDS', 'sentiment_score']
     all_cols   = apple_cols + macro_cols
 
     n         = len(combined)
-    train_end = int(n * 0.70)   # scaler fitted on training portion only
+    train_end = int(n * 0.70)
 
     scaler = MinMaxScaler()
     scaler.fit(combined.iloc[:train_end][all_cols])
     scaled_arr = scaler.transform(combined[all_cols])
     scaled_df  = pd.DataFrame(scaled_arr, columns=all_cols, index=combined.index)
 
-    # ── FHI (notebook Section 8, cell 037-038) ───────────────────────────────
+    # ── FHI ──────────────────────────────────────────────
     scaled_df['fhi']     = sum(scaled_df[col] * w for col, w in FHI_WEIGHTS.items())
     scaled_df['fhi_log'] = np.log(scaled_df['fhi'] + 1e-8)
 
     return apple, cpi, oil, copper, gdp, fedfunds, news, combined, scaled_df
-
 
 # ─────────────────────────────────────────────
 # HELPERS
@@ -668,13 +664,13 @@ elif nav == "Predict FHI":
     import pickle
     import traceback
 
-    BASE_M = r"C:\Users\Murta\Downloads\TASK 2 FINAL ZIP (1)\TASK 2 FINAL ZIP"
+    BASE_M = "Models"
 
     MODEL_PATHS = {
-        "ARIMAX — Ratios Only":  BASE_M + r"\arima_ratios.pkl",
-        "ARIMAX — All Features": BASE_M + r"\arima_all.pkl",
-        "LSTM — Ratios Only":    BASE_M + r"\lstm_ratios.keras",
-        "LSTM — All Features":   BASE_M + r"\lstm_all.keras",
+    "ARIMAX — Ratios Only":  BASE_M + "/arima_ratios.pkl",
+    "ARIMAX — All Features": BASE_M + "/arima_all.pkl",
+    "LSTM — Ratios Only":    BASE_M + "/lstm_ratios.keras",
+    "LSTM — All Features":   BASE_M + "/lstm_all.keras",
     }
 
     # ── Model loader ──────────────────────────────────────────────────────────
