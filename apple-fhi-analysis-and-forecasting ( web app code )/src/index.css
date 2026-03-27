@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 216 28% 7%;
+    --foreground: 210 29% 92%;
+
+    --card: 215 27% 11%;
+    --card-foreground: 210 29% 92%;
+
+    --popover: 215 27% 11%;
+    --popover-foreground: 210 29% 92%;
+
+    --primary: 212 100% 67%;
+    --primary-foreground: 216 28% 7%;
+
+    --secondary: 215 14% 17%;
+    --secondary-foreground: 210 29% 92%;
+
+    --muted: 215 14% 17%;
+    --muted-foreground: 215 14% 58%;
+
+    --accent: 215 14% 17%;
+    --accent-foreground: 210 29% 92%;
+
+    --destructive: 2 76% 62%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 14% 21%;
+    --input: 215 14% 21%;
+    --ring: 212 100% 67%;
+
+    --radius: 0.5rem;
+
+    /* Custom semantic tokens */
+    --surface: 215 27% 11%;
+    --surface-2: 215 14% 15%;
+    --success: 130 55% 49%;
+    --warning: 40 74% 49%;
+    --info: 212 100% 67%;
+    --chart-purple: 264 70% 77%;
+    --chart-orange: 3 100% 72%;
+    --chart-teal: 135 62% 43%;
+
+    --sidebar-background: 215 27% 11%;
+    --sidebar-foreground: 210 29% 92%;
+    --sidebar-primary: 212 100% 67%;
+    --sidebar-primary-foreground: 216 28% 7%;
+    --sidebar-accent: 215 14% 17%;
+    --sidebar-accent-foreground: 210 29% 92%;
+    --sidebar-border: 215 14% 21%;
+    --sidebar-ring: 212 100% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}
+
+@layer components {
+  .font-mono {
+    font-family: 'IBM Plex Mono', monospace !important;
+  }
+  .card-dashboard {
+    @apply bg-card border border-border rounded-lg p-5 transition-all duration-200;
+  }
+  .card-dashboard:hover {
+    border-color: hsla(212, 100%, 67%, 0.15);
+    box-shadow: 0 0 20px hsla(212, 100%, 67%, 0.03);
+  }
+  .card-title-label {
+    @apply text-[11px] uppercase tracking-[1.5px] text-muted-foreground mb-2;
+  }
+  .card-value {
+    @apply font-mono text-[28px] font-semibold text-foreground leading-none;
+  }
+  .section-header {
+    @apply text-lg font-semibold text-foreground mt-6 mb-4 pb-2 border-b border-border;
+  }
+  .insight-box {
+    @apply rounded-lg p-4 my-3 text-sm leading-relaxed text-muted-foreground;
+    background: linear-gradient(135deg, hsla(212, 100%, 67%, 0.08) 0%, hsla(130, 55%, 49%, 0.05) 100%);
+    border: 1px solid hsla(212, 100%, 67%, 0.2);
+  }
+  .pill {
+    @apply px-2.5 py-0.5 rounded-full text-xs font-mono;
+  }
+  .pill-green {
+    @apply pill;
+    background: hsla(130, 55%, 49%, 0.15);
+    color: hsl(var(--success));
+    border: 1px solid hsla(130, 55%, 49%, 0.3);
+  }
+  .pill-red {
+    @apply pill;
+    background: hsla(2, 76%, 62%, 0.15);
+    color: hsl(var(--destructive));
+    border: 1px solid hsla(2, 76%, 62%, 0.3);
+  }
+  .pill-blue {
+    @apply pill;
+    background: hsla(212, 100%, 67%, 0.15);
+    color: hsl(var(--primary));
+    border: 1px solid hsla(212, 100%, 67%, 0.3);
+  }
+  .pill-yellow {
+    @apply pill;
+    background: hsla(40, 74%, 49%, 0.15);
+    color: hsl(var(--warning));
+    border: 1px solid hsla(40, 74%, 49%, 0.3);
+  }
+}
